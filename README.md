@@ -2,6 +2,13 @@
 
 Simple Python tool to convert Red Hat certification XML files into beautiful, interactive HTML viewers.
 
+## Installation
+
+```bash
+git clone git@gitlab.cee.redhat.com:akaabyia/rhcert-results-xml-to-html.git
+cd rhcert-results-xml-to-html
+```
+
 ## Usage
 
 ```bash
