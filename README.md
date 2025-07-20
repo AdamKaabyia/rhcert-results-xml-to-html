@@ -23,10 +23,6 @@ For each XML file, the tool creates:
 - **Responsive design** - works on all devices
 - **Self-contained** - no dependencies, pure Python
 
-## Example
-
-See `demo-viewer.html` for a sample output with 22 tests and 1,180 commands.
-
 ## Requirements
 
 - Python 3.6+
