@@ -1,0 +1,21 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+
+# Generated viewer outputs
+*-viewer.html
+*-styles.css
+*-script.js
+
+# Uploaded XML and other input data
+uploads/
+*.xml
+
+# Docker artifacts
+*.tar
+
+# Misc
+.DS_Store

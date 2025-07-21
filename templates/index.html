@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RHCert XML Viewer Upload</title>
+    <style>
+        body {
+            font-family: "Red Hat Mono", monospace;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 70%);
+        }
+
+        header {
+            position: absolute;
+            top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #cc0000;
+        }
+
+        header p {
+            margin: 4px 0 0;
+            color: #555;
+        }
+
+        #file-label {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #006600;
+            word-break: break-all;
+        }
+
+        #drop-zone {
+            background: #ffffff;
+            border: 3px dashed #cc0000;
+            border-radius: 12px;
+            padding: 60px 90px;
+            text-align: center;
+            transition: background 0.25s ease;
+            max-width: 650px;
+        }
+
+        #drop-zone.dragover {
+            background: #fff0f0;
+            border-color: #ff6666;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+            color: #cc0000;
+        }
+
+        p {
+            margin: 0 0 30px;
+            color: #444;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: #cc0000;
+            border: none;
+            color: #fff;
+            padding: 12px 26px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #a30000;
+        }
+
+        .btn[disabled] {
+            background: #999 !important;
+            cursor: not-allowed;
+        }
+
+        .flash {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .flash-msg {
+            background: #e0ffe0;
+            color: #006600;
+            padding: 10px 20px;
+            border: 1px solid #88cc88;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .history {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .history ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .history li {
+            margin: 4px 0;
+        }
+
+        .history a {
+            color: #cc0000;
+            text-decoration: none;
+        }
+
+        .history a:hover {
+            text-decoration: underline;
+        }
+
+        /* Spinner overlay */
+        #overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 6px solid #ccc;
+            border-top-color: #cc0000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash">
+                {% for msg in messages %}
+                    <div class="flash-msg">{{ msg }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <header>
+        <h1>Red Hat Certification XML Viewer</h1>
+        <p>Select your XML results and choose an action</p>
+    </header>
+
+    <div id="drop-zone">
+        <h2>Drag & Drop your RHCert XML file here</h2>
+        <p>or click the area to choose a file</p>
+        <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+            <input id="file-input" type="file" name="file" accept=".xml" required />
+            <div id="file-label"></div>
+            <div class="btn-group">
+                <button id="view-btn" class="btn" type="button">View Online</button>
+                <button id="download-btn" class="btn" type="button">Download HTML</button>
+            </div>
+            <input type="hidden" name="action" id="action-field" value="view" />
+        </form>
+    </div>
+
+    <footer>Red Hat Certification Viewer &mdash; Powered by Python & Flask</footer>
+
+    <script>
+        const dropZone = document.getElementById("drop-zone");
+        const fileInput = document.getElementById("file-input");
+        const uploadForm = document.getElementById("upload-form");
+
+        dropZone.addEventListener("click", (e) => {
+            // Ignore clicks originating from action buttons
+            if (e.target.closest(".btn-group")) return;
+            fileInput.click();
+        });
+
+        dropZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropZone.classList.add("dragover");
+        });
+
+        dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
+
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("dragover");
+
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                uploadForm.submit();
+            }
+        });
+
+        // Button behaviour
+        const actionField = document.getElementById("action-field");
+        const viewBtn = document.getElementById("view-btn");
+        const downloadBtn = document.getElementById("download-btn");
+
+        // Disable buttons until file selected
+        viewBtn.disabled = downloadBtn.disabled = true;
+
+        fileInput.addEventListener("change", () => {
+            if (fileInput.files.length) {
+                document.getElementById("file-label").textContent = fileInput.files[0].name;
+                viewBtn.disabled = downloadBtn.disabled = false;
+            } else {
+                viewBtn.disabled = downloadBtn.disabled = true;
+            }
+        });
+
+        document.getElementById("view-btn").addEventListener("click", () => {
+            if (viewBtn.disabled) return; // safety
+            actionField.value = "view";
+            uploadForm.submit();
+        });
+        document.getElementById("download-btn").addEventListener("click", () => {
+            if (downloadBtn.disabled) return;
+            actionField.value = "download";
+            uploadForm.submit();
+        });
+
+        // Show overlay spinner during programmatic submit
+        uploadForm.addEventListener("submit", () => {
+            const overlay = document.createElement("div");
+            overlay.id = "overlay";
+            overlay.innerHTML = '<div class="spinner"></div><p>Processing…</p>';
+            document.body.appendChild(overlay);
+        });
+    </script>
+</body>
+</html>
