@@ -22,7 +22,8 @@ $ python web_server.py            # http://localhost:5000
 ```
 
 * Drag & drop an `*.xml` file onto the page.
-* Click "View Online" or "Download HTML (ZIP)".
+* Leave the **Auto-open viewer after upload** checkbox ticked to view instantly, or untick it to show "View Online" / "Download HTML" buttons.
+* Use the **Show Failures** button in the left-hand sidebar of the generated viewer to quickly filter to only failing commands/tests.
 
 The app deletes previous viewers automatically - the workspace never fills up with old files.
 
@@ -47,7 +48,6 @@ $ hostname -I        # prints something like "10.50.15.137 127.0.0.1"
 # use the non-127 address
 
 http://10.50.15.137:8080
-```
 ```
 
 ---
@@ -146,6 +146,8 @@ spec:
 - Precise command highlighting
 - Responsive layout
 - Clean, self-contained HTML/CSS/JS output
+- Optional auto-open toggle (skip the buttons and load the viewer immediately)
+- Sidebar filter **Show Failures** to focus on non-passing commands
 - One-click ZIP download of the viewer assets
 
 ---

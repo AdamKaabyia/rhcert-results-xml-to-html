@@ -12,11 +12,13 @@ def generate_js_content() -> str:
 let sidebarWidth = 320;
 let isDragging = false;
 let sidebarCollapsed = false;
+let showOnlyFailed = false;
 
 // Initialize sidebar functionality
 document.addEventListener('DOMContentLoaded', function() {
     initializeResizer();
     updateMainContentMargin();
+    // attach keyboard shortcut? none
 });
 
 function initializeResizer() {
@@ -170,6 +172,32 @@ function filterTests() {
         } else {
             item.style.display = 'none';
         }
+    });
+}
+
+function toggleFailed() {
+    showOnlyFailed = !showOnlyFailed;
+    const btn = document.getElementById('failedToggle');
+    btn.textContent = showOnlyFailed ? 'Show All' : 'Show Failures';
+    applyFailureFilter();
+}
+
+function applyFailureFilter() {
+    const commandItems = document.querySelectorAll('.command-item');
+    commandItems.forEach(item => {
+        const isPass = item.querySelector('.cmd-status')?.classList.contains('cmd-success');
+        if (showOnlyFailed && isPass) {
+            item.style.display = 'none';
+        } else {
+            item.style.display = 'flex';
+        }
+    });
+
+    // Hide entire tests that now have no visible commands
+    const testItems = document.querySelectorAll('.test-item');
+    testItems.forEach(test => {
+        const anyVisible = test.querySelectorAll('.command-item').length && Array.from(test.querySelectorAll('.command-item')).some(ci => ci.style.display !== 'none');
+        test.style.display = anyVisible ? 'block' : 'none';
     });
 }'''
 

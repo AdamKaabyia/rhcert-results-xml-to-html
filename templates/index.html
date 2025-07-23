@@ -10,6 +10,7 @@
             margin: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column; /* stack main elements vertically */
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 70%);
@@ -171,6 +172,15 @@
             font-size: 12px;
             color: #888;
         }
+        .auto-toggle {
+            display:block;
+            max-width:650px;
+            margin:24px auto 0; /* provides spacing below drop zone */
+            text-align:center;
+            font-size:14px;
+            color:#444;
+        }
+        .auto-toggle input { margin-right:6px; transform:scale(1.1); }
     </style>
 </head>
 <body>
@@ -203,6 +213,11 @@
         </form>
     </div>
 
+    <label class="auto-toggle" id="auto-container">
+  <input type="checkbox" id="auto-checkbox" checked>
+  Auto-open viewer after upload
+</label>
+
     <footer>Red Hat Certification Viewer &mdash; Powered by Python & Flask</footer>
 
     <script>
@@ -229,7 +244,8 @@
 
             if (e.dataTransfer.files.length) {
                 fileInput.files = e.dataTransfer.files;
-                uploadForm.submit();
+                // trigger the same handling as manual selection
+                fileInput.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
 
@@ -238,15 +254,32 @@
         const viewBtn = document.getElementById("view-btn");
         const downloadBtn = document.getElementById("download-btn");
 
+        // Auto-open checkbox logic
+        const autoCheck = document.getElementById("auto-checkbox");
+        const btnGroup = document.querySelector(".btn-group");
+
+        const updateButtonVisibility = () => {
+            btnGroup.style.display = autoCheck && autoCheck.checked ? "none" : "flex";
+        };
+        updateButtonVisibility();
+        if (autoCheck) autoCheck.addEventListener("change", updateButtonVisibility);
+
         // Disable buttons until file selected
         viewBtn.disabled = downloadBtn.disabled = true;
 
         fileInput.addEventListener("change", () => {
             if (fileInput.files.length) {
                 document.getElementById("file-label").textContent = fileInput.files[0].name;
-                viewBtn.disabled = downloadBtn.disabled = false;
+                if (autoCheck && autoCheck.checked) {
+                    actionField.value = "view";
+                    uploadForm.submit();
+                } else {
+                    viewBtn.disabled = downloadBtn.disabled = false;
+                    updateButtonVisibility();
+                }
             } else {
                 viewBtn.disabled = downloadBtn.disabled = true;
+                btnGroup.style.display = "none";
             }
         });
 

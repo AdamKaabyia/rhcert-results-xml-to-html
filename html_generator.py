@@ -14,6 +14,7 @@ def generate_sidebar_html(tests: List[Dict]) -> str:
         <div class="nav-title">Test Navigator</div>
         <div class="nav-controls">
             <button class="nav-btn" onclick="jumpToTop()">Top</button>
+            <button class="nav-btn" id="failedToggle" onclick="toggleFailed()">Show Failures</button>
             <input type="text" class="nav-search" placeholder="Search tests/commands..." oninput="filterTests()">
         </div>
     </div>
