@@ -421,7 +421,7 @@ certification-test::before {
   content: 'Certification Test Results,  rhcert ' attr(rhcert-version) ' '
     attr(rhcert-release) '   ' attr(plan-time);
   font-weight: 700;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABMoAAAEiCAYAAAAI3D5xAAAACXBIWXMAABYlAAAWJQFJUiTwAAAgAElEQVR4nO3df4xd553f98/j5XpFZeHLKxBLA440o222GyNRZhQYCYKo5gjBLoLd2BwXadEC1g71T5EuAnMEFCgQJOZwt8gfRQANja0boCg4zBpttmigoZ11i3UDzni1KLowqmG1wG42qDmUIsAsCB2Ompiy7OgJHt7vIQ/vj5n74/x4nnPeL2BA6d4Rde8598c5n/P9fh/nvRcAAAAADQdae6vgHQAABJREFUAe6/j5XpFZeHLKxBLA440o222GyNRZhQYCYKo5gjBLoLd2BwXadEC1g71T5EuAnMEFCgQJOZwt8gfRQANja0boCg4zBpttmigoZ11i3UDzni1KLowqmG1wG42qDmUIsAsCB2Ompiy7OgJHt7vIQ/vj5n74/x4nnPeL2BA6d4Rde8598c5n/P9fh/nvRcAAAAP');
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABMoAAAEiCAYAAAAI3D5xAAAACXBIWXMAABYlAAAWJQFJUiTwAAAgAElEQVR4nO3df4xd553f98/j5XpFZeHLKxBLA440o222GyNRZhQYCYKo5gjBLoLd2BwXadEC1g71T5EuAnMEFCgQJOZwt8gfRQANja0boCg4zBpttmigoZ11i3UDzni1KlowqmG1wG42qDmUIsAsCB2Ompiy7OgJHt7vIQ/vj5n74/x4nnPeL2BA6d4Rde8598c5n/P9fh/nvRcAAAAP');
   background-position: 0px 20px;
   background-size: 200px auto;
   background-repeat: no-repeat;
@@ -788,69 +788,23 @@ os build::before {
     white-space: nowrap;
 }
 
-/* Enhanced Command Highlighting */
+/* Command Highlighting (simple) */
 command.highlight {
-    background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24) !important;
-    background-size: 200% 200% !important;
-    animation: commandHighlight 2.5s ease-in-out !important;
-    border-radius: 6px !important;
-    padding: 6px 12px !important;
-    margin: 8px 0 !important;
-    border: 3px solid #ff6b6b !important;
-    box-shadow: 0 0 25px rgba(255, 107, 107, 0.7) !important;
-    position: relative !important;
-    z-index: 100 !important;
-}
-
-command.highlight::before {
-    content: "SELECTED COMMAND" !important;
-    position: absolute !important;
-    top: -20px !important;
-    left: 0 !important;
-    background: #ff6b6b !important;
-    color: white !important;
-    padding: 2px 8px !important;
+    background: #fff3cd !important; /* soft yellow */
+    border: 2px solid #ffc107 !important;
     border-radius: 4px !important;
-    font-size: 9px !important;
-    font-weight: bold !important;
-    z-index: 101 !important;
+    padding: 4px 8px !important;
+    display: inline-block !important;
 }
 
-@keyframes commandHighlight {
-    0% {
-        background-position: 0% 50%;
-        box-shadow: 0 0 25px rgba(255, 107, 107, 0.9);
-        transform: scale(1.03);
-        border-color: #ff6b6b;
-    }
-    25% {
-        background-position: 100% 50%;
-        box-shadow: 0 0 30px rgba(78, 205, 196, 0.9);
-        border-color: #4ecdc4;
-    }
-    50% {
-        background-position: 0% 50%;
-        box-shadow: 0 0 30px rgba(69, 183, 209, 0.9);
-        border-color: #45b7d1;
-    }
-    75% {
-        background-position: 100% 50%;
-        box-shadow: 0 0 30px rgba(249, 202, 36, 0.9);
-        border-color: #f9ca24;
-    }
-    100% {
-        background-position: 0% 50%;
-        box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
-        transform: scale(1);
-        border-color: #ff6b6b;
-    }
-}
+/* Keep original command text when highlighted (no override) */
 
 /* Sidebar Toggle Button */
 .sidebar-toggle {
     position: fixed;
     left: 320px;
-    top: 50%;
+    top: 20px;
+    transform: translateY(0);
     background: #cc0000;
     color: white;
     border: none;

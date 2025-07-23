@@ -73,8 +73,13 @@ def generate_complete_html(xml_file_path: str, css_filename: str, js_filename: s
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Red Hat Certification Viewer</title>
     <link rel="stylesheet" href="{css_filename}">
+    <style>
+        .back-btn {{ position: fixed; top: 10px; right: 10px; z-index: 1100; background: #cc0000; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; }}
+        .back-btn:hover {{ background: #a30000; }}
+    </style>
 </head>
 <body>
+    <button class="back-btn" onclick="window.location.href='/'">Back to Upload</button>
     <!-- Navigation Sidebar -->
     <div class="nav-sidebar" id="sidebar">
         <div class="sidebar-resizer" id="resizer"></div>
