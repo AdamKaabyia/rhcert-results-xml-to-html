@@ -8,7 +8,7 @@ Convert Red Hat Certification result XML files into a modern, interactive HTML v
 
 ```bash
 # clone & enter the project
-$ git clone https://gitlab.cee.redhat.com/akaabyia/rhcert-results-xml-to-html.git
+$ git clone https://github.com/AdamKaabyia/rhcert-results-xml-to-html.git
 $ cd rhcert-results-xml-to-html
 
 # create virtual-env (optional but recommended)
