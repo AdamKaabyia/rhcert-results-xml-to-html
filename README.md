@@ -40,7 +40,7 @@ $ podman run -d --name viewer -p 8080:8080 quay.io/akaabyia/rhcert-viewer:latest
 
 # open in browser
 http://localhost:8080
-
+```
 If you need the exact host IP (e.g. to reach it from another machine on your LAN):
 
 ```bash
